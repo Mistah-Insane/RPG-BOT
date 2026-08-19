@@ -8,7 +8,7 @@ port = 6667
 
 # Safely fetch settings from Render Environment Variables (with your defaults applied)
 oauth = os.getenv('TWITCH_OAUTH')  # Pulls securely from Render environment variable
-nickname = os.getenv('TWITCH_NICKNAME', 'the_insane_arcade')
+nickname = os.getenv('TWITCH_NICKNAME', 'mistah_insane')
 channel = os.getenv('TWITCH_CHANNEL', '#cyri97')
 message = os.getenv('TWITCH_MESSAGE', '$rpg boss event')
 
