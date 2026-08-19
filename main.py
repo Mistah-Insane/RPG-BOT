@@ -25,7 +25,7 @@ oauth = os.getenv('TWITCH_OAUTH')
 nickname = os.getenv('TWITCH_NICKNAME', 'mistah_insane')  # Set to mistah_insane
 
 # Target channels set directly as default values (added sugarqueenjanice)
-default_channels = '#cyri97 #the_insane_arcade #viviladee #sugarqueenjanice'
+default_channels = '#cyri97 #the_insane_arcade #sugarqueenjanice'
 raw_channels = os.getenv('TWITCH_CHANNEL', default_channels).split()
 channels = [ch if ch.startswith('#') else f"#{ch}" for ch in raw_channels]
 
