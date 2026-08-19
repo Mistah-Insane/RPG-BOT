@@ -38,6 +38,3 @@ s.send(f"JOIN {channel}\r\n".encode('utf-8'))
 while True:
     s.send(f"PRIVMSG {channel} :{message}\r\n".encode('utf-8'))
     time.sleep(60)
-Sent
-Compose
-Write to Mistah Insane
