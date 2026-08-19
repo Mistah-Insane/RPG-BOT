@@ -5,7 +5,7 @@ from threading import Thread
 from flask import Flask
 
 # 1. Web server for Render Free Web Service
-app = Flask(_name_)
+app = Flask(__name__)
 
 @app.route('/')
 def home():
