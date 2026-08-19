@@ -30,7 +30,7 @@ raw_channels = os.getenv('TWITCH_CHANNEL', default_channels).split()
 channels = [ch if ch.startswith('#') else f"#{ch}" for ch in raw_channels]
 
 # Filter channel lists for specific messages
-msg1_targets = [ch for ch in channels if ch in ['#cyri97', '#viviladee']]
+msg1_targets = [ch for ch in channels if ch in ['#cyri97', '#sugarqueenjanice', '#viviladee']]
 msg2_targets = channels  # All channels (includes #sugarqueenjanice)
 
 # Message 1: Sends every 60 seconds (1 minute)
