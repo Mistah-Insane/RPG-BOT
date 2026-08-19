@@ -29,6 +29,10 @@ default_channels = '#cyri97 #the_insane_arcade #viviladee'
 raw_channels = os.getenv('TWITCH_CHANNEL', default_channels).split()
 channels = [ch if ch.startswith('#') else f"#{ch}" for ch in raw_channels]
 
+# Filter channel lists for specific messages
+msg1_targets = [ch for ch in channels if ch in ['#cyri97', '#viviladee']]
+msg2_targets = channels  # All channels
+
 # Message 1: Sends every 60 seconds (1 minute)
 message1 = os.getenv('TWITCH_MESSAGE_1', '$rpg boss event')
 interval1 = 60 
@@ -49,16 +53,16 @@ s.send(f"NICK {nickname}\r\n".encode('utf-8'))
 for channel in channels:
     s.send(f"JOIN {channel}\r\n".encode('utf-8'))
 
-# Helper function to broadcast messages across all channels
-def send_to_all(msg):
-    for channel in channels:
+# Helper function to send messages to a specific list of channels
+def send_to_channels(msg, target_channels):
+    for channel in target_channels:
         s.send(f"PRIVMSG {channel} :{msg}\r\n".encode('utf-8'))
         time.sleep(0.5)  # Short pause to prevent rate-limit throttling
 
 # Send initial messages on startup
-send_to_all(message1)
+send_to_channels(message1, msg1_targets)
 time.sleep(2)
-send_to_all(message2)
+send_to_channels(message2, msg2_targets)
 
 # Track last sent timestamps
 last_sent_1 = time.time()
@@ -70,12 +74,12 @@ while True:
 
     # Check timer for Message 1 ($rpg boss event)
     if now - last_sent_1 >= interval1:
-        send_to_all(message1)
+        send_to_channels(message1, msg1_targets)
         last_sent_1 = now
 
     # Check timer for Message 2 ($rpg boss battle)
     if now - last_sent_2 >= interval2:
-        send_to_all(message2)
+        send_to_channels(message2, msg2_targets)
         last_sent_2 = now
 
     time.sleep(1)
