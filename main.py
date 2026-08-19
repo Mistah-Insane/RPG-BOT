@@ -23,7 +23,11 @@ port = 6667
 
 oauth = os.getenv('TWITCH_OAUTH')
 nickname = os.getenv('TWITCH_NICKNAME', 'mistah_insane')  # Set to mistah_insane
-channel = os.getenv('TWITCH_CHANNEL', '#cyri97')
+
+# Target channels set directly as default values
+default_channels = '#cyri97 #the_insane_arcade #viviladee'
+raw_channels = os.getenv('TWITCH_CHANNEL', default_channels).split()
+channels = [ch if ch.startswith('#') else f"#{ch}" for ch in raw_channels]
 
 # Message 1: Sends every 60 seconds (1 minute)
 message1 = os.getenv('TWITCH_MESSAGE_1', '$rpg boss event')
@@ -40,12 +44,21 @@ s = socket.socket()
 s.connect((server, port))
 s.send(f"PASS {oauth}\r\n".encode('utf-8'))
 s.send(f"NICK {nickname}\r\n".encode('utf-8'))
-s.send(f"JOIN {channel}\r\n".encode('utf-8'))
+
+# Join all target channels
+for channel in channels:
+    s.send(f"JOIN {channel}\r\n".encode('utf-8'))
+
+# Helper function to broadcast messages across all channels
+def send_to_all(msg):
+    for channel in channels:
+        s.send(f"PRIVMSG {channel} :{msg}\r\n".encode('utf-8'))
+        time.sleep(0.5)  # Short pause to prevent rate-limit throttling
 
 # Send initial messages on startup
-s.send(f"PRIVMSG {channel} :{message1}\r\n".encode('utf-8'))
+send_to_all(message1)
 time.sleep(2)
-s.send(f"PRIVMSG {channel} :{message2}\r\n".encode('utf-8'))
+send_to_all(message2)
 
 # Track last sent timestamps
 last_sent_1 = time.time()
@@ -57,14 +70,12 @@ while True:
 
     # Check timer for Message 1 ($rpg boss event)
     if now - last_sent_1 >= interval1:
-        s.send(f"PRIVMSG {channel} :{message1}\r\n".encode('utf-8'))
+        send_to_all(message1)
         last_sent_1 = now
-        time.sleep(1)
 
     # Check timer for Message 2 ($rpg boss battle)
     if now - last_sent_2 >= interval2:
-        s.send(f"PRIVMSG {channel} :{message2}\r\n".encode('utf-8'))
+        send_to_all(message2)
         last_sent_2 = now
-        time.sleep(1)
 
     time.sleep(1)
