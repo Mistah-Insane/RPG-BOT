@@ -24,14 +24,14 @@ port = 6667
 oauth = os.getenv('TWITCH_OAUTH')
 nickname = os.getenv('TWITCH_NICKNAME', 'mistah_insane')  # Set to mistah_insane
 
-# Target channels set directly as default values
-default_channels = '#cyri97 #the_insane_arcade #viviladee'
+# Target channels set directly as default values (added sugarqueenjanice)
+default_channels = '#cyri97 #the_insane_arcade #viviladee #sugarqueenjanice'
 raw_channels = os.getenv('TWITCH_CHANNEL', default_channels).split()
 channels = [ch if ch.startswith('#') else f"#{ch}" for ch in raw_channels]
 
 # Filter channel lists for specific messages
 msg1_targets = [ch for ch in channels if ch in ['#cyri97', '#viviladee']]
-msg2_targets = channels  # All channels
+msg2_targets = channels  # All channels (includes #sugarqueenjanice)
 
 # Message 1: Sends every 60 seconds (1 minute)
 message1 = os.getenv('TWITCH_MESSAGE_1', '$rpg boss event')
